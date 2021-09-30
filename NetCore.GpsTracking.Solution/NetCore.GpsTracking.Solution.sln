@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_Main", "NetCore.GpsTracking.Project\NetCore.GpsTracking.Project\_Main.csproj", "{8EBCB91E-394E-44F3-9CA1-ECD48A6C9942}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpsTracking", "NetCore.GpsTracking\NetCore.GpsTracking\GpsTracking.csproj", "{349E5CD3-92D2-4698-A690-EE8B73621793}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EBCB91E-394E-44F3-9CA1-ECD48A6C9942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EBCB91E-394E-44F3-9CA1-ECD48A6C9942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EBCB91E-394E-44F3-9CA1-ECD48A6C9942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EBCB91E-394E-44F3-9CA1-ECD48A6C9942}.Release|Any CPU.Build.0 = Release|Any CPU
+		{349E5CD3-92D2-4698-A690-EE8B73621793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349E5CD3-92D2-4698-A690-EE8B73621793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349E5CD3-92D2-4698-A690-EE8B73621793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349E5CD3-92D2-4698-A690-EE8B73621793}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE844F2A-1F15-4CC7-8E08-F35ADE867FB2}
+	EndGlobalSection
+EndGlobal

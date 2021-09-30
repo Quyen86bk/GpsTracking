@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<ApplicationIcon></ApplicationIcon>
+		<AssemblyName>NetCore.GpsTrackingModule</AssemblyName>
+		<RootNamespace>NetCore.GpsTrackingModule</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Data\NewFolder\**" />
+	  <EmbeddedResource Remove="Data\NewFolder\**" />
+	  <None Remove="Data\NewFolder\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="EntityFramework" Version="6.4.0" />
+		<PackageReference Include="EPPlus.Core" Version="1.5.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />		
+	</ItemGroup>
+	<ItemGroup>		
+		<Reference Include="NetCore.Library">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.Library.dll</HintPath>
+		</Reference>
+		<Reference Include="NetCore.Websites">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.Websites.dll</HintPath>
+		</Reference>
+		<Reference Include="NetCore.IndexModule">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.IndexModule.dll</HintPath>
+		</Reference>
+		<Reference Include="NetCore.ManageModule">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.ManageModule.dll</HintPath>
+		</Reference>
+		<Reference Include="NetCore.TranslateModule">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.TranslateModule.dll</HintPath>
+		</Reference>
+		<Reference Include="NetCore.CommonModule">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.CommonModule.dll</HintPath>
+		</Reference>
+		<Reference Include="NetCore.ProfileModule">
+			<HintPath>D:\_WorkStation\_Store\_Library\NetCore.ProfileModule.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+</Project>

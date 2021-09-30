@@ -251,11 +251,3 @@ _Pvt_Extensions
 .fake/
 
 .vscode/
-
-*.7z
-*.zip
-*.rar
-
-main.js
-main.js.map
-main.css

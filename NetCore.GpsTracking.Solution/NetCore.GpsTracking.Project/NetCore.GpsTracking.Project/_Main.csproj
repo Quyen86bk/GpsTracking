@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <StartupObject>NetCore.Project.Program</StartupObject>
+        <AssemblyName>NetCore.Project</AssemblyName>
+        <RootNamespace>NetCore.Project</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="EPPlus.Core" Version="1.5.4" />
+        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
+        <PackageReference Include="System.Management" Version="4.5.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <!-- Files not to show in IDE -->
+        <None Remove="node_modules\**" />
+        <None Remove=".babelrc" />
+        <None Remove=".eslintrc.js" />
+        <None Remove=".gitattributes" />
+        <None Remove=".gitignore" />
+        <None Remove="Dockerfile" />
+        <None Remove="webpack.config.js" />
+        <None Remove="webpack.config.vendor.js" />
+        <None Remove="yarn.lock" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\NetCore.GpsTracking\NetCore.GpsTracking\GpsTracking.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="NetCore.Base">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.Base.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.Project.Views">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.Project.Views.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.Library">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.Library.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.Websites">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.Websites.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.IndexModule">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.IndexModule.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.ManageModule">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.ManageModule.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.TranslateModule">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.TranslateModule.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.CommonModule">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.CommonModule.dll</HintPath>
+        </Reference>
+        <Reference Include="NetCore.ProfileModule">
+            <HintPath>D:\_WorkStation\_Store\_Library\NetCore.ProfileModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="wwwroot\js\" />
+    </ItemGroup>
+    
+    <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+        <Exec Command="npm run build" />
+
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="wwwroot\_main\**; wwwroot\vendor\**; _Vue\dist\**" />
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
+</Project>
