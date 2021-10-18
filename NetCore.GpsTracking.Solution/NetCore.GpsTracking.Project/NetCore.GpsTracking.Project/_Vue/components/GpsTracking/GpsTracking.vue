@@ -741,7 +741,7 @@
               var Models = response.data.Result.Models
               if (Models.length == 1) {
 
-                if (this.CenterLongitude != Models[0].Last[0] || this.CenterLatitude != Models[0].Last[1]) {
+                if (this.CenterLongitude != Models[0].LastLongitude || this.CenterLatitude != Models[0].LastLatitude) {
                   this.CenterLongitude = Models[0].Last[0]
                   this.CenterLatitude = Models[0].Last[1]
 

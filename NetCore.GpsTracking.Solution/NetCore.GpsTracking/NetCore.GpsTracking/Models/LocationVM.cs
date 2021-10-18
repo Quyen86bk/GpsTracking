@@ -18,6 +18,9 @@ namespace NetCore.GpsTrackingModule.Models
 
         public int StatusId { get; set; }
 
+        public float LastLatitude { get; set; }
+        public float LastLongitude { get; set; }
+
         public int EventTypeId { get; set; }
         [JsonIgnore]
         [NotMapped]
@@ -42,7 +45,7 @@ namespace NetCore.GpsTrackingModule.Models
             }
         }
         public List<List<float>> Locations { get; set; }
-        public List<float> Last { get; set; }
+       
         public List<int> Status { get; set; }
         public string Address { get; set; }
         public List<EventGeofenceVM> EventGeofences { get; set; } = new List<EventGeofenceVM>();
