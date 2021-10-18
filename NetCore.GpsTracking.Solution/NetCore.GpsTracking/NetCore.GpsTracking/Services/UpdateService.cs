@@ -122,7 +122,7 @@ namespace NetCore.GpsTrackingModule.Services
                 foreach (var otherDevice in OtherDevicesSameGroupWithThis)
                 {
                     var distance = MapHelper.DistanceKm(gpsDevice.LastLatitude, gpsDevice.LastLongitude, otherDevice.LastLatitude, otherDevice.LastLongitude);
-                    testContent2 += otherDevice.Name + " (" + otherDevice.LastLatitude + "°N, " + otherDevice.LastLongitude + "°E) khoảng cách " + distance + " km." + lib.Line;
+                    testContent2 += otherDevice.Name + " (" + otherDevice.LastLatitude + "°N, " + otherDevice.LastLongitude + "°E) khoảng cách " + distance + " km," + lib.Line;
                     if (distance <= 5)
                     {
                         var mappedUsers = DBs.GpsDeviceMapping.Query.Where(x => x.GpsDeviceId == gpsDevice.Id);
