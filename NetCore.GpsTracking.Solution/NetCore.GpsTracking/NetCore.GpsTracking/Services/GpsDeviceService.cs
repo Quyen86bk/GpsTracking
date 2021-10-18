@@ -63,7 +63,8 @@ namespace NetCore.GpsTrackingModule.Services
                 GpsDevice.Name = model.Name;
                 GpsDevice.Code = model.Code;
                 GpsDevice.Phone = model.Phone;
-                GpsDevice.Category = model.Category;
+                GpsDevice.CategoryId = model.CategoryId;
+                GpsDevice.StatusId = model.StatusId;
 
                 //Remove GeofenceMappings
 

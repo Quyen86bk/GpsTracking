@@ -9,9 +9,6 @@
         </a-select-option>
       </a-select>
     </Modelx>
-    <Modelx Any Title="@NO@">
-      <a-checkbox v-model="model.Distribution">Phân quyền cho mọi thiết bị</a-checkbox>
-    </Modelx>
   </div>
 </template>
 

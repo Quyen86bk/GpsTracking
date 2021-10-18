@@ -3,7 +3,7 @@
     <Modelx TBX :model="model" Property="Name" Tip="Tên thiết bị" First Must />
     <Modelx TBX :model="model" Property="Code" Tip="Định danh thiết bị" Must />
     <Modelx TBX :model="model" Property="Phone" Tip="Số điện thoại trên thiết bị" Must />
-    <Modelx DDL :model="model" Property="Category" Tip="Đối tượng theo dõi" :Data="Category" />
+    <Modelx DDL :model="model" Property="CategoryId" Tip="Đối tượng theo dõi" :Data="Category" />
     <Modelx Any Title="Phân quyền giới hạn địa lý">
       <a-select mode="multiple" :default-value="model.Geofences" style="width: 250px;" placeholder="Phân quyền giới hạn địa lý" @change="GeofenceOnChange">
         <a-select-option v-for="(item, index) in Geofences" :key="(item).toString()">
@@ -31,9 +31,9 @@
     data() {
       return {
         Category: [
-          { Value: "Default", Name: "Default" },
-          { Value: "Ôtô", Name: "Ôtô" },
-          { Value: "Xe máy", Name: "Xe máy" },
+          { Value: 1, Name: "Default" },
+          { Value: 2, Name: "Ôtô" },
+          { Value: 3, Name: "Xe máy" },
         ],
         Geofences: [],
         Notifications: [],
