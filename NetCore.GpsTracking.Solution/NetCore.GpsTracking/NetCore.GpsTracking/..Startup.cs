@@ -33,6 +33,8 @@ namespace NetCore.GpsTrackingModule
             var Group = IndexConfig.Add(IndexGroup.ConfigIndex());
             var ProfileInfo = IndexConfig.Add(IndexProfileInfo.ConfigIndex());
             var Notificator = IndexConfig.Add(IndexNotificator.ConfigIndex());
+            var ReportLocation = IndexConfig.Add(IndexReportLocation.ConfigIndex());
+            var ReportEvent = IndexConfig.Add(IndexReportEvent.ConfigIndex());
             //Auto@Code@Do@Not@Change@ConfigIndex
         }
         #endregion

@@ -23,11 +23,11 @@ namespace NetCore.GpsTrackingModule.Controllers
 
         [Route("Api/Update/Index")]
         [HttpGet]
-        public async Task<ActionResult> Index(string deviceCode, float longitude, float latitude)
+        public async Task<ActionResult> Index(int cmd, string deviceCode, int eventTypeId, float longitude, float latitude)
         {
             try
             {
-                await Services.Update.Index(pipeline, deviceCode, longitude, latitude);
+                await Services.Update.Index(pipeline, cmd, deviceCode, eventTypeId, longitude, latitude);
             }
             catch (Exception ex)
             {

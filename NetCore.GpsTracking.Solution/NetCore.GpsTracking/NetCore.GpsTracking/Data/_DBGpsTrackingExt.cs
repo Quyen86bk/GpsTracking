@@ -31,6 +31,7 @@ namespace NetCore.GpsTrackingModule.Data
             b.Ignore<NotificatorMapping>();
             b.Ignore<Permission>();
             b.Ignore<ProfileInfo>();
+            b.Ignore<EventGeofenceMapping>();
             //Auto@Code@Do@Not@Change@Ignore
         }
         private static void ToTable(ModelBuilder b, IServiceProvider _ServiceProvider)
@@ -52,6 +53,7 @@ namespace NetCore.GpsTrackingModule.Data
             b.Entity<NotificatorMapping>().ToTable(RepositoryName + "_NotificatorMapping");
             b.Entity<Permission>().ToTable(RepositoryName + "_Permission");
             b.Entity<ProfileInfo>().ToTable(RepositoryName + "_ProfileInfo");
+            b.Entity<EventGeofenceMapping>().ToTable(RepositoryName + "_EventGeofenceMapping");
             //Auto@Code@Do@Not@Change@ToTable
         }
 
@@ -77,6 +79,7 @@ namespace NetCore.GpsTrackingModule.Data
             NetCore.Websites.Data.Tool.CreateMapping(server, db, RepositoryName, "NotificatorMapping", "", toDbContext);
             NetCore.Websites.Data.Tool.CreateMapping(server, db, RepositoryName, "Permission", "", toDbContext);
             NetCore.Websites.Data.Tool.CreateMapping(server, db, RepositoryName, "ProfileInfo", "", toDbContext);
+            NetCore.Websites.Data.Tool.CreateMapping(server, db, RepositoryName, "EventGeofenceMapping", "", toDbContext);
             //Auto@Code@Do@Not@Change@CreateMapping
         }
 
@@ -98,6 +101,7 @@ namespace NetCore.GpsTrackingModule.Data
         public DbSet<NotificatorMapping> NotificatorMapping { get; set; }
         public DbSet<Permission> Permission { get; set; }
         public DbSet<ProfileInfo> ProfileInfo { get; set; }
+        public DbSet<EventGeofenceMapping> EventGeofenceMapping { get; set; }
         //Auto@Code@Do@Not@Change@DbSet
         #endregion
     }

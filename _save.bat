@@ -1,1 +1,0 @@
-7z a -tzip NetCore.GpsTracking.Solution.7z NetCore.GpsTracking.Solution\ -xr!.7z -xr!.rar -xr!.zip -xr!.vs -xr!.git -xr!bin -xr!obj -xr!build -xr!node_modules -xr!"main.js" -xr!"main.js.map" -xr!"main.css" -xr!_Tool -xr!_Publish -xr!dist -xr!packages

@@ -12,6 +12,7 @@ namespace NetCore.GpsTrackingModule.Data
 
         public string Protocol { get; set; }
         public DateTime DeviceTime { get; set; }
+
         public string Address { get; set; }
         public float Latitude { get; set; }
         public float Longitude { get; set; }

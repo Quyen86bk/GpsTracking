@@ -25,7 +25,11 @@ namespace NetCore.GpsTrackingModule.Services
 
         Task Delete(Pipeline pipeline, List<Guid> IDs);
 
-        Task GetLocations(Pipeline pipeline);
+        Task GetLocations(Pipeline pipeline, LocationFilterVM filter);
+
+        Task GetHeatmaps(Pipeline pipeline, HeatmapFilterVM filter);
+
+        Task GetReplays(Pipeline pipeline, ReplayFilterVM filter);
     }
 
     public partial class LocationService : _ServiceGpsTracking, ILocationService
@@ -181,16 +185,191 @@ namespace NetCore.GpsTrackingModule.Services
             pipeline.Status = ResponseStatus.Successful;
         }
 
-        public async Task GetLocations(Pipeline pipeline)
+        //
+        public async Task GetLocations(Pipeline pipeline, LocationFilterVM filter)
         {
             //Select
             var Locations = DBs.Location.Query;
+
+            //Where / filter
+            if (!pipeline.User.IsAdmin)
+            {
+                var mappedDevices = DBs.GpsDeviceMapping.Query.Where(x => x.ProfileInfoId == pipeline.UserId);
+                Locations = Locations.Where(x => mappedDevices.Any(y => y.GpsDeviceId == x.GpsDeviceId));
+            }
+
+            //filter
+            var gpsDeviceName = "All";
+            if (lib.Selected(filter.GpsDeviceId))
+            {
+                var gpsDevice = DBs.GpsDevice.Query.FirstOrDefault(x => x.Id == filter.GpsDeviceId);
+                if (gpsDevice != null)
+                {
+                    gpsDeviceName = gpsDevice.Name;
+                    Locations = Locations.Where(x => x.GpsDeviceId == filter.GpsDeviceId);
+                }
+            }
+
+            var groupName = "All";
+            if (lib.Selected(filter.GroupId))
+            {
+                var group = DBs.Group.Query
+                    .Include(x => x.GpsDeviceMappings)
+                    .FirstOrDefault(x => x.Id == filter.GroupId);
+                if (group != null)
+                {
+                    groupName = group.Name;
+                    Locations = Locations.Where(x => group.GpsDeviceMappings.Any(y => y.GpsDeviceId == x.GpsDeviceId));
+                }
+            }
 
             //Order
             Locations = Locations.OrderByDescending(x => x.CreatedTime);
 
             //Models
             var List = await Locations
+                .Include(x => x.GpsDevice).ThenInclude(x => x.EventGeofenceMappings).ThenInclude(x => x.Geofence)
+                .GroupBy(x => x.GpsDeviceId)
+                .ToListAsync();
+
+            var timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day);
+            var timeTo = lib.Time;
+
+            var Models = new List<LocationVM>();
+            foreach (var item in List)
+            {
+                var model = new LocationVM
+                {
+                    Id = item.FirstOrDefault().GpsDevice.Id,
+                    Code = item.FirstOrDefault().GpsDevice.Code,
+                    Name = item.FirstOrDefault().GpsDevice.Name,
+                    CategoryId = item.FirstOrDefault().GpsDevice.CategoryId,
+                    StatusId = item.FirstOrDefault().GpsDevice.StatusId,
+                    EventTypeId = item.FirstOrDefault().GpsDevice.EventTypeId,
+
+                    Locations = item.Where(x => x.CreatedTime >= timeFrom && x.CreatedTime <= timeTo)
+                        .OrderBy(x => x.CreatedTime)
+                        .Select(x => new List<float> { x.Longitude, x.Latitude }).ToList(),
+
+                    Last = item.OrderByDescending(x => x.CreatedTime)
+                        .Select(x => new List<float> { x.Longitude, x.Latitude })
+                        .FirstOrDefault(),
+
+                    Address = item.FirstOrDefault().Address,
+                };
+                Models.Add(model);
+
+                var EventGeofenceMappings = item.FirstOrDefault().GpsDevice.EventGeofenceMappings;
+                foreach (var eventMapping in EventGeofenceMappings)
+                {
+                    model.EventGeofences.Add(new EventGeofenceVM
+                    {
+                        Event = eventMapping.EventTypeName,
+                        Geofence = eventMapping.Geofence.Name
+                    });
+                }
+            }
+
+            //Result
+            pipeline.Status = ResponseStatus.Successful;
+            pipeline.Result = new
+            {
+                Models,
+            };
+        }
+
+        public async Task GetHeatmaps(Pipeline pipeline, HeatmapFilterVM filter)
+        {
+            //Select
+            var Heatmaps = DBs.Location.Query;
+
+            //Where / filter
+            if (!pipeline.User.IsAdmin)
+            {
+                var mappedDevices = DBs.GpsDeviceMapping.Query.Where(x => x.ProfileInfoId == pipeline.UserId);
+                Heatmaps = Heatmaps.Where(x => mappedDevices.Any(y => y.GpsDeviceId == x.GpsDeviceId));
+            }
+
+            //filter.Keyword
+            var gpsDeviceName = "All";
+            if (lib.Selected(filter.GpsDeviceId))
+            {
+                var gpsDevice = DBs.GpsDevice.Query.FirstOrDefault(x => x.Id == filter.GpsDeviceId);
+                if (gpsDevice != null)
+                {
+                    gpsDeviceName = gpsDevice.Name;
+                    Heatmaps = Heatmaps.Where(x => x.GpsDeviceId == filter.GpsDeviceId);
+                }
+            }
+
+            var groupName = "All";
+            if (lib.Selected(filter.GroupId))
+            {
+                var group = DBs.Group.Query
+                    .Include(x => x.GpsDeviceMappings)
+                    .FirstOrDefault(x => x.Id == filter.GroupId);
+                if (group != null)
+                {
+                    groupName = group.Name;
+                    Heatmaps = Heatmaps.Where(x => group.GpsDeviceMappings.Any(y => y.GpsDeviceId == x.GpsDeviceId));
+                }
+            }
+
+            if (lib.Selected(filter.TimeRange))
+            {
+                var timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day);
+                var timeTo = lib.Time;
+                int BeginofWeek(DateTime dt)
+                {
+                    switch (dt.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday:
+                            return 0;
+                        case DayOfWeek.Tuesday:
+                            return 1;
+                        case DayOfWeek.Wednesday:
+                            return 2;
+                        case DayOfWeek.Thursday:
+                            return 3;
+                        case DayOfWeek.Friday:
+                            return 4;
+                        case DayOfWeek.Saturday:
+                            return 5;
+                        case DayOfWeek.Sunday:
+                            return 6;
+                    }
+                    throw new Exception("Error!");
+                }
+
+                if (filter.TimeRange == 2)
+                {
+                    timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day).AddDays(-1);
+                    timeTo = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day).AddTicks(-1);
+                }
+                else if (filter.TimeRange == 3)
+                {
+                    timeFrom = lib.Time.AddDays(-1 * BeginofWeek(lib.Time));
+                    timeTo = timeFrom.AddDays(6);
+                }
+                else if (filter.TimeRange == 4)
+                {
+                    timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, 1);
+                    timeTo = lib.Time;
+                }
+
+                filter.FromDate = timeFrom;
+                filter.ToDate = timeTo;
+            }
+
+            //filter.Date
+            if (filter.HaveDate())
+                Heatmaps = Heatmaps.Where(x => x.CreatedTime >= filter.FromDate && x.CreatedTime <= filter.ToDate);
+
+            //Order
+            Heatmaps = Heatmaps.OrderByDescending(x => x.CreatedTime);
+
+            //Models
+            var List = await Heatmaps
                 .Include(x => x.GpsDevice)
                 .GroupBy(x => x.GpsDeviceId)
                 .ToListAsync();
@@ -200,11 +379,17 @@ namespace NetCore.GpsTrackingModule.Services
             {
                 Models.Add(new LocationVM
                 {
-                    Id = item.FirstOrDefault().Id,
+                    Id = item.FirstOrDefault().GpsDevice.Id,
                     Code = item.FirstOrDefault().GpsDevice.Code,
+                    Name = item.FirstOrDefault().GpsDevice.Name,
+                    CategoryId = item.FirstOrDefault().GpsDevice.CategoryId,
+                    StatusId = item.FirstOrDefault().GpsDevice.StatusId,
 
-                    Locations = item.Select(x => new List<float> { x.Longitude, x.Latitude }).ToList(),
-                    Last = item.OrderBy(x => x.CreatedTime)
+                    Locations = item
+                        .OrderBy(x => x.CreatedTime)
+                        .Select(x => new List<float> { x.Longitude, x.Latitude }).ToList(),
+
+                    Last = item.OrderByDescending(x => x.CreatedTime)
                         .Select(x => new List<float> { x.Longitude, x.Latitude })
                         .FirstOrDefault(),
                 });
@@ -215,6 +400,153 @@ namespace NetCore.GpsTrackingModule.Services
             pipeline.Result = new
             {
                 Models,
+            };
+        }
+
+        public async Task GetReplays(Pipeline pipeline, ReplayFilterVM filter)
+        {
+            //Select
+            var Replays = DBs.Location.Query;
+
+            //Where / filter
+            if (!pipeline.User.IsAdmin)
+            {
+                var mappedDevices = DBs.GpsDeviceMapping.Query.Where(x => x.ProfileInfoId == pipeline.UserId);
+                Replays = Replays.Where(x => mappedDevices.Any(y => y.GpsDeviceId == x.GpsDeviceId));
+            }
+
+            //filter
+            var gpsDeviceName = "All";
+            if (lib.Selected(filter.GpsDeviceId))
+            {
+                var gpsDevice = DBs.GpsDevice.Query.FirstOrDefault(x => x.Id == filter.GpsDeviceId);
+                if (gpsDevice != null)
+                {
+                    gpsDeviceName = gpsDevice.Name;
+                    Replays = Replays.Where(x => x.GpsDeviceId == filter.GpsDeviceId);
+                }
+            }
+
+            var groupName = "All";
+            if (lib.Selected(filter.GroupId))
+            {
+                var group = DBs.Group.Query
+                    .Include(x => x.GpsDeviceMappings)
+                    .FirstOrDefault(x => x.Id == filter.GroupId);
+                if (group != null)
+                {
+                    groupName = group.Name;
+                    Replays = Replays.Where(x => group.GpsDeviceMappings.Any(y => y.GpsDeviceId == x.GpsDeviceId));
+                }
+            }
+
+            if (lib.Selected(filter.TimeRange))
+            {
+                var timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day);
+                var timeTo = lib.Time;
+                int BeginofWeek(DateTime dt)
+                {
+                    switch (dt.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday:
+                            return 0;
+                        case DayOfWeek.Tuesday:
+                            return 1;
+                        case DayOfWeek.Wednesday:
+                            return 2;
+                        case DayOfWeek.Thursday:
+                            return 3;
+                        case DayOfWeek.Friday:
+                            return 4;
+                        case DayOfWeek.Saturday:
+                            return 5;
+                        case DayOfWeek.Sunday:
+                            return 6;
+                    }
+                    throw new Exception("Error!");
+                }
+
+                if (filter.TimeRange == 2)
+                {
+                    timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day).AddDays(-1);
+                    timeTo = new DateTime(lib.Time.Year, lib.Time.Month, lib.Time.Day).AddTicks(-1);
+                }
+                else if (filter.TimeRange == 3)
+                {
+                    timeFrom = lib.Time.AddDays(-1 * BeginofWeek(lib.Time));
+                    timeTo = timeFrom.AddDays(6);
+                }
+                else if (filter.TimeRange == 4)
+                {
+                    timeFrom = new DateTime(lib.Time.Year, lib.Time.Month, 1);
+                    timeTo = lib.Time;
+                }
+
+                filter.FromDate = timeFrom;
+                filter.ToDate = timeTo;
+            }
+
+            //filter.Date
+            if (filter.HaveDate())
+                Replays = Replays.Where(x => x.CreatedTime >= filter.FromDate && x.CreatedTime <= filter.ToDate);
+
+            //Order
+            Replays = Replays.OrderByDescending(x => x.CreatedTime);
+
+            //Models
+            var List = await Replays
+                .Include(x => x.GpsDevice)
+                .GroupBy(x => x.GpsDeviceId)
+                .ToListAsync();
+
+            var Points = new List<ReplayVM>();
+            foreach (var item in List)
+            {
+                var Locations = item.Select(x => new { x.Longitude, x.Latitude, Tick = lib.ToDateTime(x.CreatedTime).Ticks, Time = lib.NiceDateTime3(x.CreatedTime) }).ToList();
+                foreach (var location in Locations)
+                {
+                    Points.Add(new ReplayVM
+                    {
+                        Id = item.FirstOrDefault().Id,
+                        Code = item.FirstOrDefault().GpsDevice.Code,
+                        Name = item.FirstOrDefault().GpsDevice.Name,
+                        CategoryId = item.FirstOrDefault().GpsDevice.CategoryId,
+                        StatusId = item.FirstOrDefault().GpsDevice.StatusId,
+
+                        Longitude = location.Longitude,
+                        Latitude = location.Latitude,
+
+                        Tick = location.Tick,
+                        Time = location.Time,
+                    });
+                }
+            }
+
+            var Routes = new List<LocationVM>();
+            foreach (var item in List)
+            {
+                Routes.Add(new LocationVM
+                {
+                    Id = item.FirstOrDefault().Id,
+                    Code = item.FirstOrDefault().GpsDevice.Code,
+                    Name = item.FirstOrDefault().GpsDevice.Name,
+
+                    Locations = item
+                        .OrderBy(x => x.CreatedTime)
+                        .Select(x => new List<float> { x.Longitude, x.Latitude }).ToList(),
+
+                    Last = item.OrderByDescending(x => x.CreatedTime)
+                        .Select(x => new List<float> { x.Longitude, x.Latitude })
+                        .FirstOrDefault(),
+                });
+            }
+
+            //Result
+            pipeline.Status = ResponseStatus.Successful;
+            pipeline.Result = new
+            {
+                Points,
+                Routes,
             };
         }
     }

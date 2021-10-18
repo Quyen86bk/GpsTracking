@@ -12,6 +12,10 @@ var Error404 = lib.GetComponent(window.index.all, "Error404")
 var Index = lib.GetComponent(window.index.all, "Index")
 
 import GpsTracking from 'components/GpsTracking/GpsTracking'
+import GpsTab from 'components/GpsTracking/GpsTab'
+
+import Heatmap from 'components/GpsTracking/Heatmap'
+import Replay from 'components/GpsTracking/Replay'
 
 export const routes = [
   { name: 'Home', path: '/', component: Home, title: 'Home', icon: 'home', show: true, enabled: true },
@@ -24,6 +28,10 @@ export const routes = [
   { name: 'Index', path: '/Index/:Module?/:Entity?/:CMD?/:Id?', component: Index, title: 'Index', icon: 'star', show: false, enabled: true },
 
   { name: 'GpsTracking', path: '/GpsTracking', component: GpsTracking, title: 'Gps Tracking', icon: 'star', show: true, enabled: true },
+  { name: 'GpsTab', path: '/GpsTab', component: GpsTab, title: 'Gps Tabs', icon: 'star', show: true, enabled: true },
+
+  { name: 'Heatmap', path: '/Heatmap', component: Heatmap, title: 'Heatmap', icon: 'star', show: true, enabled: true },
+  { name: 'Replay', path: '/Replay', component: Replay, title: 'Replay', icon: 'star', show: true, enabled: true },
 ]
 
 export const ManualMenus = []

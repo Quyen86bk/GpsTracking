@@ -7,6 +7,48 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_Main", "NetCore.GpsTrackin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpsTracking", "NetCore.GpsTracking\NetCore.GpsTracking\GpsTracking.csproj", "{349E5CD3-92D2-4698-A690-EE8B73621793}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "_Index", "NetCore.GpsTracking.Project\_Index\", "{483A6559-9CAD-477D-8EE7-BD286F3B85CF}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64807"
+		Debug.AspNetCompiler.PhysicalPath = "NetCore.GpsTracking.Project\_Index\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64807\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64807"
+		Release.AspNetCompiler.PhysicalPath = "NetCore.GpsTracking.Project\_Index\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64807\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64807"
+		SlnRelativePath = "NetCore.GpsTracking.Project\_Index\"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "_Vue", "..\..\..\! Dev\_Vue\", "{E2A71122-C225-481E-940B-1921754F5293}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_61342"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\! Dev\_Vue\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_61342\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_61342"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\! Dev\_Vue\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_61342\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "61342"
+		SlnRelativePath = "..\..\..\! Dev\_Vue\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +63,14 @@ Global
 		{349E5CD3-92D2-4698-A690-EE8B73621793}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349E5CD3-92D2-4698-A690-EE8B73621793}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349E5CD3-92D2-4698-A690-EE8B73621793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{483A6559-9CAD-477D-8EE7-BD286F3B85CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{483A6559-9CAD-477D-8EE7-BD286F3B85CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{483A6559-9CAD-477D-8EE7-BD286F3B85CF}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{483A6559-9CAD-477D-8EE7-BD286F3B85CF}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{E2A71122-C225-481E-940B-1921754F5293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2A71122-C225-481E-940B-1921754F5293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2A71122-C225-481E-940B-1921754F5293}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2A71122-C225-481E-940B-1921754F5293}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

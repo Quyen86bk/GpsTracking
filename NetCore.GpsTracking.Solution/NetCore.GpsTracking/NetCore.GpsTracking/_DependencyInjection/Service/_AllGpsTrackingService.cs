@@ -28,6 +28,8 @@ namespace NetCore.GpsTrackingModule
             InjectGroup(services);
             InjectUpdate(services);
             InjectProfileInfo(services);
+            InjectReportLocation(services);
+            InjectReportEvent(services);
             //Auto@Code@Do@Not@Change@AllServiceDI
         }
     }

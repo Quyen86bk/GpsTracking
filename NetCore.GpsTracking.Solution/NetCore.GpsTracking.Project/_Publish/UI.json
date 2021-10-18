@@ -1,0 +1,15 @@
+{
+  "PageTitle": "GPS Tracking",
+  "AppName": "GPS Tracking",
+  "Version": "1.0",
+  "Copyright": "HTI Group",
+  "Logo": {
+    "Login": "/Index/img/Logo360x0.png",
+    "Image": {
+      "Full": "/Index/img/Logo180x60.png",
+      "Short": "/Index/img/Logo60x60.png"
+    },
+    "Full": "",
+    "Short": ""
+  }
+}

@@ -12,7 +12,7 @@ namespace NetCore.GpsTrackingModule.Index
         {
             var config = new IndexConfig(Startup.Module);            
             config.Entity.Name = "Event";
-            config.Entity.Title = "Báo cáo trạng thái";
+            config.Entity.Title = "Trạng thái";
 
             config.ComModel.Data = "Event-Model-Data";
             config.ComModel.DefaultModel = new
@@ -20,33 +20,30 @@ namespace NetCore.GpsTrackingModule.Index
                 Id = lib.Id0,
                 EventName = "",
                 EventTime = "",
-                GeofenceId = "",
-                LocationId = "",
             };
             config.ComList.Content.Data.Columns.AddRange(
                 new List<ComListDataColumn>
                 {
                     new ComListDataColumn
                     {
-                        Title = "Trạng thái",
+                        Title = "Thiết bị",
+                        Property = "GpsDevice.Name",
+                    },
+                    new ComListDataColumn
+                    {
+                        Title = "Thông báo",
                         Property = "EventName",
-                        Width = 100,
                     },
                     new ComListDataColumn
                     {
                         Title = "Thời điểm",
                         Property = "EventTime",
+                        Type = "DateTime"
                     },
                     new ComListDataColumn
                     {
                         Title = "Giới hạn địa lý",
-                        Property = "GeofenceId",
-                    },
-                    new ComListDataColumn
-                    {
-                        Title = "Vị trí",
-                        Property = "LocationId",
-                        Width = 100,
+                        Property = "Geofence.Name",
                     },
                 }
             );
