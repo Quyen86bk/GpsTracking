@@ -6,6 +6,7 @@ using NetCore.Websites.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NetCore.GpsTrackingModule.Models;
 
 namespace NetCore.GpsTrackingModule.Controllers
 {
@@ -90,11 +91,39 @@ namespace NetCore.GpsTrackingModule.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetLocations()
+        public async Task<ActionResult> GetLocations(LocationFilterVM filter)
         {
             try
             {
-                await Services.Location.GetLocations(pipeline);
+                await Services.Location.GetLocations(pipeline, filter);
+            }
+            catch (Exception ex)
+            {
+                pipeline.OnError(ex);
+            }
+            return pipeline.Response;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetHeatmaps(HeatmapFilterVM filter)
+        {
+            try
+            {
+                await Services.Location.GetHeatmaps(pipeline, filter);
+            }
+            catch (Exception ex)
+            {
+                pipeline.OnError(ex);
+            }
+            return pipeline.Response;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetReplays(ReplayFilterVM filter)
+        {
+            try
+            {
+                await Services.Location.GetReplays(pipeline, filter);
             }
             catch (Exception ex)
             {

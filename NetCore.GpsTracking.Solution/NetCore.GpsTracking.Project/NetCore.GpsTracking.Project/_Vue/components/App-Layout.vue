@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-spin v-if="Loading" tip="Loading..." size="large" :style="LoadingStyle()" />
-    <template v-if="!IsLoggedIn">
+    <template v-if="!IsLoggedIn || NoSlider">
       <router-view></router-view>
     </template>
     <template v-else>
@@ -112,7 +112,12 @@
           padding: '16px 0px 0px 16px',
         }
 
-        if (this.Collapsed)
+        if (this.NoSlider)
+          result = {
+            margin: '0px 0px 0px 0px',
+            padding: '0px 0px 0px 0px',
+          }
+        else if (this.Collapsed)
           result = {
             margin: '0px 0px 0px 0px',
             padding: '0px 0px 0px 16px',
@@ -124,6 +129,7 @@
 
     data() {
       return {
+        NoSlider: false,
       }
     },
 
@@ -147,6 +153,12 @@
 
     async created() {
       this.StartAutoRun();
+
+      let params = (new URL(document.location)).searchParams;
+      let noSlider = params.get("noSlider");
+
+      if (lib.EQ(noSlider, 1))
+        this.NoSlider = true
     },
   }
 </script>

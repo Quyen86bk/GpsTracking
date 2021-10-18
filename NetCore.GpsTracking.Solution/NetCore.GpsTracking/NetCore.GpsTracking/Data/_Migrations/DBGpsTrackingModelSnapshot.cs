@@ -74,17 +74,17 @@ namespace NetCore.GpsTrackingModule.Data._Migrations
 
                     b.Property<DateTime?>("DeletedTime");
 
-                    b.Property<string>("EventName");
+                    b.Property<Guid?>("GeofenceId");
 
-                    b.Property<string>("EventTime");
-
-                    b.Property<string>("GeofenceId");
+                    b.Property<Guid>("GpsDeviceId");
 
                     b.Property<bool?>("IsActived");
 
                     b.Property<bool?>("IsDeleted");
 
-                    b.Property<string>("LocationId");
+                    b.Property<Guid?>("LocationId");
+
+                    b.Property<int>("TypeId");
 
                     b.Property<Guid?>("UpdatedById");
 
@@ -92,9 +92,55 @@ namespace NetCore.GpsTrackingModule.Data._Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GeofenceId");
+
+                    b.HasIndex("GpsDeviceId");
+
+                    b.HasIndex("LocationId");
+
                     b.ToTable("Event");
 
                     b.HasDiscriminator().HasValue("Event");
+                });
+
+            modelBuilder.Entity("NetCore.GpsTrackingModule.Data.EventGeofenceMapping", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("CreatedById");
+
+                    b.Property<DateTime?>("CreatedTime");
+
+                    b.Property<Guid?>("DataId");
+
+                    b.Property<Guid?>("DeletedById");
+
+                    b.Property<DateTime?>("DeletedTime");
+
+                    b.Property<int>("EventTypeId");
+
+                    b.Property<Guid?>("GeofenceId");
+
+                    b.Property<Guid?>("GpsDeviceId");
+
+                    b.Property<bool?>("IsActived");
+
+                    b.Property<bool?>("IsDeleted");
+
+                    b.Property<Guid?>("UpdatedById");
+
+                    b.Property<DateTime?>("UpdatedTime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GeofenceId");
+
+                    b.HasIndex("GpsDeviceId");
+
+                    b.ToTable("EventGeofenceMapping");
+
+                    b.HasDiscriminator().HasValue("EventGeofenceMapping");
                 });
 
             modelBuilder.Entity("NetCore.GpsTrackingModule.Data.Geofence", b =>
@@ -220,7 +266,7 @@ namespace NetCore.GpsTrackingModule.Data._Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Category");
+                    b.Property<int>("CategoryId");
 
                     b.Property<string>("Code");
 
@@ -234,13 +280,21 @@ namespace NetCore.GpsTrackingModule.Data._Migrations
 
                     b.Property<DateTime?>("DeletedTime");
 
+                    b.Property<int>("EventTypeId");
+
                     b.Property<bool?>("IsActived");
 
                     b.Property<bool?>("IsDeleted");
 
+                    b.Property<float>("LastLatitude");
+
+                    b.Property<float>("LastLongitude");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("Phone");
+
+                    b.Property<int>("StatusId");
 
                     b.Property<Guid?>("UpdatedById");
 
@@ -707,6 +761,33 @@ namespace NetCore.GpsTrackingModule.Data._Migrations
                     b.ToTable("ProfileInfo");
 
                     b.HasDiscriminator().HasValue("ProfileInfo");
+                });
+
+            modelBuilder.Entity("NetCore.GpsTrackingModule.Data.Event", b =>
+                {
+                    b.HasOne("NetCore.GpsTrackingModule.Data.Geofence", "Geofence")
+                        .WithMany()
+                        .HasForeignKey("GeofenceId");
+
+                    b.HasOne("NetCore.GpsTrackingModule.Data.GpsDevice", "GpsDevice")
+                        .WithMany()
+                        .HasForeignKey("GpsDeviceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("NetCore.GpsTrackingModule.Data.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+                });
+
+            modelBuilder.Entity("NetCore.GpsTrackingModule.Data.EventGeofenceMapping", b =>
+                {
+                    b.HasOne("NetCore.GpsTrackingModule.Data.Geofence", "Geofence")
+                        .WithMany()
+                        .HasForeignKey("GeofenceId");
+
+                    b.HasOne("NetCore.GpsTrackingModule.Data.GpsDevice", "GpsDevice")
+                        .WithMany("EventGeofenceMappings")
+                        .HasForeignKey("GpsDeviceId");
                 });
 
             modelBuilder.Entity("NetCore.GpsTrackingModule.Data.GeofenceDetail", b =>

@@ -267,6 +267,7 @@ namespace NetCore.GpsTrackingModule.Services
                             IsFirstNameShort = true,
 
                             IsActived = true,
+
                         };
                         await SaveUser(new Pipeline(pipeline).Default, user, CRUD);
                     }

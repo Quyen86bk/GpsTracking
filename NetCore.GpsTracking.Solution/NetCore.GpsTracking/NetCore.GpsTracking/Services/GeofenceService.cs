@@ -209,6 +209,13 @@ namespace NetCore.GpsTrackingModule.Services
             //Select
             var Geofences = DBs.Geofence.Query;
 
+            //Where / filter
+            if (!pipeline.User.IsAdmin)
+            {
+                var mappedGeofences = DBs.GeofenceMapping.Query.Where(x => x.ProfileInfoId == pipeline.UserId);
+                Geofences = Geofences.Where(x => mappedGeofences.Any(y => y.GeofenceId == x.Id));
+            }
+
             //Models
             var List = await Geofences
                 .Include(x => x.Details)

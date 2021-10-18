@@ -61,7 +61,6 @@ namespace NetCore.GpsTrackingModule.Services
 
                 //Set
                 Notification.Name = model.Name;
-                Notification.Distribution = model.Distribution;
 
                 //Remove NotificatorMappings
 

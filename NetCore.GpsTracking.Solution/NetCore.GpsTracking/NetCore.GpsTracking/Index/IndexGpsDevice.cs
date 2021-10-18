@@ -46,7 +46,7 @@ namespace NetCore.GpsTrackingModule.Index
                     new ComListDataColumn
                     {
                         Title = "Đối tượng theo dõi",
-                        Property = "Category",
+                        Property = "CategoryName",
                     },
                     new ComListDataColumn
                     {

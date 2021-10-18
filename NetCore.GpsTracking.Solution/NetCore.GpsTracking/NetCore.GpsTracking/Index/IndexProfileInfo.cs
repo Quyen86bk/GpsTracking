@@ -5,7 +5,8 @@ using System.Collections.Generic;
 namespace NetCore.GpsTrackingModule.Index
 {
     //Add to: Startup.cs
-    //var ProfileInfo = IndexConfig.Add(IndexProfileInfo.ConfigIndex());
+    //var ProfileInfo = IndexConfi
+    //g.Add(IndexProfileInfo.ConfigIndex());
     public class IndexProfileInfo
     {
         public static IndexConfig ConfigIndex()

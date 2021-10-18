@@ -34,6 +34,7 @@ namespace NetCore.GpsTrackingModule
             services.AddScoped<IRepository<NotificatorMapping>, Repository<NotificatorMapping>>();
             services.AddScoped<IRepository<Permission>, Repository<Permission>>();
             services.AddScoped<IRepository<ProfileInfo>, Repository<ProfileInfo>>();
+            services.AddScoped<IRepository<EventGeofenceMapping>, Repository<EventGeofenceMapping>>();
             //Auto@Code@Do@Not@Change@InjectRepository
         }
     }
@@ -258,6 +259,19 @@ namespace NetCore.GpsTrackingModule
                     _ProfileInfo = ServiceProvider.Get<IRepository<ProfileInfo>>().SetDB(DB);
                 }
                 return _ProfileInfo;
+            }
+        }
+
+        IRepository<EventGeofenceMapping> _EventGeofenceMapping;
+        public IRepository<EventGeofenceMapping> EventGeofenceMapping
+        {
+            get
+            {
+                if (_EventGeofenceMapping == null)
+                {
+                    _EventGeofenceMapping = ServiceProvider.Get<IRepository<EventGeofenceMapping>>().SetDB(DB);
+                }
+                return _EventGeofenceMapping;
             }
         }
         //Auto@Code@Do@Not@Change@Repository

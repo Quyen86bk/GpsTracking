@@ -46,7 +46,7 @@ namespace NetCore.GpsTrackingModule.Services
                 DBs.Group.Insert(Group);
             }
             else
-            {                
+            {
                 Group = await DBs.Group.Query
                     .FirstOrDefaultAsync(x => x.Id == model.Id);
             }
@@ -87,6 +87,20 @@ namespace NetCore.GpsTrackingModule.Services
                             };
                             DBs.GpsDeviceMapping.Insert(mapping);
                         }
+
+                        var gpsDeviceModel = new GpsDevice
+                        {
+                            Id = gpsDevice.Id,
+
+                            Name = gpsDevice.Name,
+                            Code = gpsDevice.Code,
+                            Phone = gpsDevice.Phone,
+                            Category = gpsDevice.Category,
+
+                            Geofences = model.Geofences,
+                            Notifications = model.Notifications,
+                        };
+                        await Services.GpsDevice.Save(new Pipeline(pipeline).Default, gpsDeviceModel);
                     }
                 }
 
@@ -149,6 +163,11 @@ namespace NetCore.GpsTrackingModule.Services
                         }
                     }
                 }
+
+                //Add new mappings to Group, also to chosen Devices
+
+
+                // Remove mappings to Group, also to chosen Devices
 
                 //Save
                 await DBs.Save();
@@ -255,7 +274,7 @@ namespace NetCore.GpsTrackingModule.Services
                 Groups = Groups.Where(x => x.Id == filter.Id);
 
             //if (lib.Selected(filter.ParentId))
-                //Groups = Groups.Where(x => x.ParentId == filter.ParentId);
+            //Groups = Groups.Where(x => x.ParentId == filter.ParentId);
 
             if (lib.Selected(filter.ExcludeId))
                 Groups = Groups.Where(x => x.Id != filter.ExcludeId);

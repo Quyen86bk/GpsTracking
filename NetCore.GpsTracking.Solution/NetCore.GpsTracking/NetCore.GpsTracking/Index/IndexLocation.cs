@@ -31,15 +31,14 @@ namespace NetCore.GpsTrackingModule.Index
                 {
                     new ComListDataColumn
                     {
-                        Title = "Code",
+                        Title = "Mã định danh",
                         Property = "GpsDevice.Code",
                     },
                     new ComListDataColumn
                     {
-                        Title = "Device",
+                        Title = "Thiết bị",
                         Property = "GpsDevice.Name",
                     },
-
                     new ComListDataColumn
                     {
                         Title = "Giao thức",
@@ -48,7 +47,8 @@ namespace NetCore.GpsTrackingModule.Index
                     new ComListDataColumn
                     {
                         Title = "Cập nhật lần cuối",
-                        Property = "DeviceTime",
+                        Property = "CreatedTime",
+                        Type = "DateTime"
                     },
                     new ComListDataColumn
                     {

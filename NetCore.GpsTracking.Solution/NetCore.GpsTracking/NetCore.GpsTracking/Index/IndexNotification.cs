@@ -19,7 +19,6 @@ namespace NetCore.GpsTrackingModule.Index
             {
                 Id = lib.Id0,
                 Name = "",
-                Distribution = false,
                 Notificators = new List<string>(),
             };
             config.ComList.Content.Data.Columns.AddRange(
@@ -34,11 +33,6 @@ namespace NetCore.GpsTrackingModule.Index
                     {
                         Title = "Phương thức",
                         Property = "ListNotificators",
-                    },
-                    new ComListDataColumn
-                    {
-                        Title = "Phân quyền cho mọi thiết bị",
-                        Property = "Distribution",
                     },
                 }
             );

@@ -58,10 +58,7 @@ namespace NetCore.GpsTrackingModule.Services
                 Event.UpdatedTime = lib.Time;
 
                 //Set
-                Event.EventName = model.EventName;
-                Event.EventTime = model.EventTime;
-                Event.GeofenceId = model.GeofenceId;
-                Event.LocationId = model.LocationId;
+                Event.TypeId = model.TypeId;
 
                 //Save
                 await DBs.Save();
@@ -89,21 +86,6 @@ namespace NetCore.GpsTrackingModule.Services
             //Select
             var Events = DBs.Event.Query;
 
-            //FilterData
-
-            ////filter.RelationId
-            //if (lib.Selected(filter.RelationId))
-            //{
-            //    if (filter.Option == 2)
-            //        Events = Events.Where(x => x.ParentId == filter.RelationId);
-            //    else
-            //        Events = Events.Where(x => x.ParentId != filter.RelationId);
-            //}
-
-            //filter.Keyword
-            if (lib.Selected(filter.Keyword))
-                Events = Events.Where(x => x.EventName.Contains(filter._Keyword));
-
             //filter.Date
             if (filter.HaveDate())
                 Events = Events.Where(x => x.CreatedTime >= filter.FromDate && x.CreatedTime <= filter.ToDate);
@@ -123,9 +105,6 @@ namespace NetCore.GpsTrackingModule.Services
             {
                 Models,
                 Total,
-                FilterData = new
-                {
-                }
             };
         }
 
@@ -144,12 +123,6 @@ namespace NetCore.GpsTrackingModule.Services
             if (lib.Selected(filter.ExcludeId))
                 Events = Events.Where(x => x.Id != filter.ExcludeId);
 
-            if (lib.Selected(filter.Keyword))
-                Events = Events.Where(x => x.EventName.Contains(filter._Keyword));
-
-            //Order
-            Events = Events.OrderBy(x => x.EventName);
-
             //Models
             var List = await Events
                 .Take(Config.MaxSelectList(filter.Keyword))
@@ -161,8 +134,6 @@ namespace NetCore.GpsTrackingModule.Services
                 Models.Add(new ListVM
                 {
                     Value = item.Id,
-                    Name = item.EventName,
-                    Info = item.EventName,
                 });
             }
 
