@@ -98,8 +98,8 @@ namespace NetCore.GpsTrackingModule.Services
 
                         emailContent += " - " + _event.TypeName + " " + geofence.Name + "<br/>";
                     }
-
                 }
+
 
                 if (lib.NotNullEmpty(emailContent))
                 {
