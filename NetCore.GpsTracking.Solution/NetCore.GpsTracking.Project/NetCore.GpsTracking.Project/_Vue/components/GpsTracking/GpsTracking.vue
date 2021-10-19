@@ -282,7 +282,7 @@
 
           map.on('draw.create', function (e) {
             this.GeofencesId = e.features[0].id
-            this.model.Geofences = e.features[0].geometry.coordinates[0]
+            this.model.Geofences = e.features[0].geometry.longitude
 
             this.ModalTitle = "Giới hạn Địa lý !"
             this.ModalVisible = true
@@ -412,7 +412,7 @@
         }
       },
 
-      SetLocation(title, id, coordinates, category, status, address) {
+      SetLocation(title, id, longitude, latitude, category, status, address) {
         id = id + "_Location_" + this.TabNumber
         this.AddedIDs.push({ Id: id, Type: 1 })
 
@@ -430,13 +430,13 @@
 
         if (!exists) {
           //not exists - add new
-          this.LastLocations.push({ Id: id, Longitude: coordinates[0], Latitude: coordinates[1] })
+          this.LastLocations.push({ Id: id, Longitude: longitude, Latitude: latitude })
           change = true
         }
         else {
           //check change
           for (var i = 0; i < this.LastLocations.length; i++) {
-            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == coordinates[0] && this.LastLocations[i].Latitude == coordinates[1]) {
+            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == longitude && this.LastLocations[i].Latitude == latitude) {
               change = false;
               break;
             }
@@ -445,8 +445,8 @@
           //update last location
           for (var i = 0; i < this.LastLocations.length; i++) {
             if (this.LastLocations[i].Id == id) {
-              this.LastLocations[i].Longitude = coordinates[0]
-              this.LastLocations[i].Latitude = coordinates[1]
+              this.LastLocations[i].Longitude = longitude
+              this.LastLocations[i].Latitude = latitude
               break;
             }
           }
@@ -486,11 +486,11 @@
                 'type': 'Feature',
                 'geometry': {
                   'type': 'Point',
-                  'coordinates': coordinates
+                  'coordinates': [longitude, latitude]
                 },
                 'properties': {
                   'description': '<strong>Thiết bị: </strong>' + title
-                    + '<p><strong>Toạ độ: </strong>' + coordinates
+                    + '<p><strong>Toạ độ: </strong>' + [longitude, latitude]
                     + '<p><strong>Địa chỉ: </strong>' + address,
                   'title': title
                 }
@@ -525,8 +525,8 @@
           const coordinates = e.features[0].geometry.coordinates.slice();
           const description = e.features[0].properties.description;
 
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          while (Math.abs(e.lngLat.lng - longitude) > 180) {
+            longitude += e.lngLat.lng > longitude ? 360 : -360;
           }
 
           new mapboxgl.Popup()
@@ -536,7 +536,7 @@
         });
       },
 
-      SetRoute(id, coordinates, locations) {
+      SetRoute(id, longitude, latitude, locations) {
         id = id + "_Route_" + this.TabNumber
         this.AddedIDs.push({ Id: id, Type: 2 })
 
@@ -554,13 +554,13 @@
 
         if (!exists) {
           //not exists - add new
-          this.LastLocations.push({ Id: id, Longitude: coordinates[0], Latitude: coordinates[1] })
+          this.LastLocations.push({ Id: id, Longitude: longitude, Latitude: latitude })
           change = true
         }
         else {
           //check change
           for (var i = 0; i < this.LastLocations.length; i++) {
-            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == coordinates[0] && this.LastLocations[i].Latitude == coordinates[1]) {
+            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == longitude && this.LastLocations[i].Latitude == latitude) {
               change = false;
               break;
             }
@@ -569,8 +569,8 @@
           //update last location
           for (var i = 0; i < this.LastLocations.length; i++) {
             if (this.LastLocations[i].Id == id) {
-              this.LastLocations[i].Longitude = coordinates[0]
-              this.LastLocations[i].Latitude = coordinates[1]
+              this.LastLocations[i].Longitude = longitude
+              this.LastLocations[i].Latitude = latitude
               break;
             }
           }
@@ -742,8 +742,8 @@
               if (Models.length == 1) {
 
                 if (this.CenterLongitude != Models[0].LastLongitude || this.CenterLatitude != Models[0].LastLatitude) {
-                  this.CenterLongitude = Models[0].Last[0]
-                  this.CenterLatitude = Models[0].Last[1]
+                  this.CenterLongitude = Models[0].LastLongitude
+                  this.CenterLatitude = Models[0].LastLatitude
 
                   map.flyTo({
                     center: [
@@ -758,10 +758,10 @@
               for (var i = 0; i < Models.length; i++) {
                 var item = Models[i]
 
-                this.SetLocation(item.Name, item.Id, item.Last, item.CategoryId, item.StatusId, item.Address);
+                this.SetLocation(item.Name, item.Id, item.LastLongitude, item.LastLatitude, item.CategoryId, item.StatusId, item.Address);
 
                 if (this.IsLiveRoute)
-                  this.SetRoute(item.Id, item.Last, item.Locations);
+                  this.SetRoute(item.Id, item.LastLongitude, item.LastLatitude, item.Locations);
 
                 this.EventMessage(item.Id, item.Name, item.EventTypeName);
                 this.EventGeofenceMessage(item.Id, item.Name, item.EventGeofences);

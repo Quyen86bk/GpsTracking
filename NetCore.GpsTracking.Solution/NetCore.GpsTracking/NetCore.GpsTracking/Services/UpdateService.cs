@@ -119,20 +119,29 @@ namespace NetCore.GpsTrackingModule.Services
 
                 //tính khoảng giữa TB-1 và các TB khác thuộc nhóm X
                 var testContent2 = "";
+                var emailContent2 = "";
+
                 foreach (var otherDevice in OtherDevicesSameGroupWithThis)
                 {
                     var distance = MapHelper.DistanceKm(gpsDevice.LastLatitude, gpsDevice.LastLongitude, otherDevice.LastLatitude, otherDevice.LastLongitude);
                     testContent2 += otherDevice.Name + " (" + otherDevice.LastLatitude + "°N, " + otherDevice.LastLongitude + "°E) khoảng cách " + distance + " km," + lib.Line;
+                    
                     if (distance <= 5)
                     {
-                        var mappedUsers = DBs.GpsDeviceMapping.Query.Where(x => x.GpsDeviceId == gpsDevice.Id);
-                        var ProfileInfos = DBs.ProfileInfo.Query.Where(x => mappedUsers.Any(y => y.ProfileInfoId == x.Id));
-                        EmailHelper.Send(ProfileInfos.Select(x => x.Email).ToList(), "Hai đối tượng tiếp cận nhau lúc " + lib.Time, gpsDevice.Name + " cách " + testContent2);
+                        emailContent2 += otherDevice.Name + " (" + otherDevice.LastLatitude + "°N, " + otherDevice.LastLongitude + "°E) khoảng cách " + distance + " km," + "<br/>";
                     }
                 }
 
                 testContent2 = gpsDevice.Name + "(" + gpsDevice.LastLatitude + ", " + gpsDevice.LastLongitude + ")" + lib.Line2 + testContent2;
-                Log.Test(testContent2);
+
+                if (lib.NotNullEmpty(emailContent2))
+                {
+                    emailContent2 = gpsDevice.Name + "(" + gpsDevice.LastLatitude + ", " + gpsDevice.LastLongitude + ")" + "<br/><br/>" + emailContent2;
+
+                    var mappedUsers = DBs.GpsDeviceMapping.Query.Where(x => x.GpsDeviceId == gpsDevice.Id);
+                    var ProfileInfos = DBs.ProfileInfo.Query.Where(x => mappedUsers.Any(y => y.ProfileInfoId == x.Id));
+                    EmailHelper.Send(ProfileInfos.Select(x => x.Email).ToList(), "Hai đối tượng tiếp cận nhau lúc " + lib.Time, emailContent2);
+                }
 
                 //Event
                 if (cmd == 2 && (eventTypeId == 1 || eventTypeId == 2))

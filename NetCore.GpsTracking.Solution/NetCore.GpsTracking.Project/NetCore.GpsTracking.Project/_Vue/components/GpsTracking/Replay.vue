@@ -183,7 +183,7 @@
         }.bind(this));
       },
 
-      SetLocation(title, id, coordinates, category, status) {
+      SetLocation(title, id, longitude, latitude, category, status) {
         id = id + "_Location"
         this.AddedIDs.push({ Id: id, Type: 1 })
 
@@ -201,13 +201,13 @@
 
         if (!exists) {
           //not exists - add new
-          this.LastLocations.push({ Id: id, Longitude: coordinates[0], Latitude: coordinates[1] })
+          this.LastLocations.push({ Id: id, Longitude: longitude, Latitude: latitude })
           change = true
         }
         else {
           //check change
           for (var i = 0; i < this.LastLocations.length; i++) {
-            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == coordinates[0] && this.LastLocations[i].Latitude == coordinates[1]) {
+            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == longitude && this.LastLocations[i].Latitude == latitude) {
               change = false;
               break;
             }
@@ -216,8 +216,8 @@
           //update last location
           for (var i = 0; i < this.LastLocations.length; i++) {
             if (this.LastLocations[i].Id == id) {
-              this.LastLocations[i].Longitude = coordinates[0]
-              this.LastLocations[i].Latitude = coordinates[1]
+              this.LastLocations[i].Longitude = longitude
+              this.LastLocations[i].Latitude = latitude
               break;
             }
           }
@@ -257,10 +257,10 @@
                 'type': 'Feature',
                 'geometry': {
                   'type': 'Point',
-                  'coordinates': coordinates
+                  'coordinates': [longitude, latitude],
                 },
                 'properties': {
-                  'description': '<strong>Thiết bị:</strong>' + title + '<p>Toạ độ:</p>' + coordinates,
+                  'description': '<strong>Thiết bị:</strong>' + title + '<p>Toạ độ:</p>' + [longitude, latitude],
                   'title': title
                 }
               }

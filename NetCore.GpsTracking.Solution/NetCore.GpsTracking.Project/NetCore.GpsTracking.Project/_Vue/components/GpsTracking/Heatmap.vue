@@ -147,8 +147,8 @@
         }.bind(this));
       },
 
-      SetLocation(title, id, coordinates, category, status) {
-        id = id + "_Location"
+      SetLocation(title, id, longitude, latitude, category, status, address) {
+        id = id + "_Location_" + this.TabNumber
         this.AddedIDs.push({ Id: id, Type: 1 })
 
         // Display Update
@@ -165,13 +165,13 @@
 
         if (!exists) {
           //not exists - add new
-          this.LastLocations.push({ Id: id, Longitude: coordinates[0], Latitude: coordinates[1] })
+          this.LastLocations.push({ Id: id, Longitude: longitude, Latitude: latitude })
           change = true
         }
         else {
           //check change
           for (var i = 0; i < this.LastLocations.length; i++) {
-            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == coordinates[0] && this.LastLocations[i].Latitude == coordinates[1]) {
+            if (this.LastLocations[i].Id == id && this.LastLocations[i].Longitude == longitude && this.LastLocations[i].Latitude == latitude) {
               change = false;
               break;
             }
@@ -180,8 +180,8 @@
           //update last location
           for (var i = 0; i < this.LastLocations.length; i++) {
             if (this.LastLocations[i].Id == id) {
-              this.LastLocations[i].Longitude = coordinates[0]
-              this.LastLocations[i].Latitude = coordinates[1]
+              this.LastLocations[i].Longitude = longitude
+              this.LastLocations[i].Latitude = latitude
               break;
             }
           }
@@ -221,10 +221,12 @@
                 'type': 'Feature',
                 'geometry': {
                   'type': 'Point',
-                  'coordinates': coordinates
+                  'coordinates': [longitude, latitude]
                 },
                 'properties': {
-                  'description': '<strong>Thiết bị:</strong>' + title + '<p>Toạ độ:</p>' + coordinates,
+                  'description': '<strong>Thiết bị: </strong>' + title
+                    + '<p><strong>Toạ độ: </strong>' + [longitude, latitude]
+                    + '<p><strong>Địa chỉ: </strong>' + address,
                   'title': title
                 }
               }
@@ -258,8 +260,8 @@
           const coordinates = e.features[0].geometry.coordinates.slice();
           const description = e.features[0].properties.description;
 
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          while (Math.abs(e.lngLat.lng - longitude) > 180) {
+            longitude += e.lngLat.lng > longitude ? 360 : -360;
           }
 
           new mapboxgl.Popup()
@@ -268,6 +270,7 @@
             .addTo(map);
         });
       },
+
       SetHeatmap(id, coordinates) {
         id = id + "_Heatmap"
         this.AddedIDs.push({ Id: id, Type: 2 })
@@ -309,7 +312,7 @@
               '#00F000', // Dưới 20 điểm có màu xanh
               20,
               '#F1ED02', // 20 điểm đến 99 có màu vàng
-              100,
+              50,
               '#FF0C01' // 100 điểm trở lên là màu đỏ
             ],
             'circle-radius': [
@@ -318,7 +321,7 @@
               20, // Dưới 20 điểm, đường tròn 20
               20,
               40, // Dưới 100 điểm, đường tròn 40
-              100,
+              50,
               80 // Trên 100 điểm, đường tròn 40
             ],
             'circle-blur': 0.5,
@@ -414,7 +417,7 @@
               for (var i = 0; i < Models.length; i++) {
                 var item = Models[i]
 
-                this.SetLocation(item.Name, item.Id, item.Last, item.CategoryId, item.StatusId);
+                this.SetLocation(item.Name, item.Id, item.LastLongitude, item.LastLatitude , item.CategoryId, item.StatusId);
                 this.SetHeatmap(item.Id, item.Locations);
               }
             }

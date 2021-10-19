@@ -388,9 +388,8 @@ namespace NetCore.GpsTrackingModule.Services
                         .OrderBy(x => x.CreatedTime)
                         .Select(x => new List<float> { x.Longitude, x.Latitude }).ToList(),
 
-                    Last = item.OrderByDescending(x => x.CreatedTime)
-                        .Select(x => new List<float> { x.Longitude, x.Latitude })
-                        .FirstOrDefault(),
+                    LastLatitude = item.FirstOrDefault().GpsDevice.LastLatitude,
+                    LastLongitude = item.FirstOrDefault().GpsDevice.LastLongitude,
                 });
             }
 
@@ -534,9 +533,8 @@ namespace NetCore.GpsTrackingModule.Services
                         .OrderBy(x => x.CreatedTime)
                         .Select(x => new List<float> { x.Longitude, x.Latitude }).ToList(),
 
-                    Last = item.OrderByDescending(x => x.CreatedTime)
-                        .Select(x => new List<float> { x.Longitude, x.Latitude })
-                        .FirstOrDefault(),
+                    LastLongitude = item.FirstOrDefault().GpsDevice.LastLongitude,
+                    LastLatitude = item.FirstOrDefault().GpsDevice.LastLatitude,
                 });
             }
 
